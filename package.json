@@ -5,12 +5,13 @@
   "main": "index.js",
   "scripts": {
     "babel-node": "babel-node --presets=@babel/preset-env",
-    "dev":"nodemon --exec npm run babel-node src/index.js"
+    "dev": "nodemon --exec npm run babel-node src/index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "promise-mysql": "^5.2.0"

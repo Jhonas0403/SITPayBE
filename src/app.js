@@ -3,9 +3,11 @@ import morgan from "morgan";
 
 //Routes
 import languageRoutes from "./routes/language.routes"
+import userRoutes from "./routes/user.routes"
 
 const app = express();
-
+var cors = require('cors');
+app.use(cors());
 //Settings
 app.set("port", 4000);
 
@@ -15,4 +17,5 @@ app.use(express.json());
 
 //routes
 app.use("/api/languages",languageRoutes)
+app.use("/api/users",userRoutes)
 export default app;
