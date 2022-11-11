@@ -16,20 +16,22 @@ const getUsers = async (req, res) => {
 
 const addUser = async (req, res) => {
   try {
-    const { namUser, lasNamUser, rolUser } = req.body;
+    const { namUser, lasNamUser, rolUser, emailUser, phoneUser, dniUser, passUser } = req.body;
 
     if (
       namUser === undefined ||
       lasNamUser === undefined ||
-      rolUser === undefined
+      rolUser === undefined ||
+      dniUser === undefined ||
+      passUser === undefined
     ) {
       res.status(400).json({ message: "Request need complete all fields" });
     }
-    const user = { namUser, lasNamUser, rolUser };
+    const user = { namUser, lasNamUser, rolUser, emailUser, phoneUser, dniUser, passUser };
 
     const connection = await getConnection();
     await connection.query("INSERT INTO users SET?", user);
-    res.json({ message: "User add" });
+    res.json({ message: "User add" , status:"OK"});
   } catch (error) {
     res.status(500);
     res.send(error.message);
