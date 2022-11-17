@@ -14,9 +14,39 @@ const getUsers = async (req, res) => {
   }
 };
 
+const loginUser = async (req, res) => {
+  try {
+    const { user, password } = req.body;
+    const connection = await getConnection();
+    const result = await connection.query(
+      "SELECT * FROM users WHERE dniUser=? AND passUser=?",
+      [user, password]
+    );
+
+    if (JSON.stringify(result) === "[]") {
+      console.log("The user doesn't exist");
+      res.json({ status: "Error", message: "The user doesn't exist" });
+    } else {
+      
+      res.json({ status: "OK", result });
+    }
+  } catch (error) {
+    res.status(500);
+    res.send(error.message);
+  }
+};
+
 const addUser = async (req, res) => {
   try {
-    const { namUser, lasNamUser, rolUser, emailUser, phoneUser, dniUser, passUser } = req.body;
+    const {
+      namUser,
+      lasNamUser,
+      rolUser,
+      emailUser,
+      phoneUser,
+      dniUser,
+      passUser,
+    } = req.body;
 
     if (
       namUser === undefined ||
@@ -27,11 +57,19 @@ const addUser = async (req, res) => {
     ) {
       res.status(400).json({ message: "Request need complete all fields" });
     }
-    const user = { namUser, lasNamUser, rolUser, emailUser, phoneUser, dniUser, passUser };
+    const user = {
+      namUser,
+      lasNamUser,
+      rolUser,
+      emailUser,
+      phoneUser,
+      dniUser,
+      passUser,
+    };
 
     const connection = await getConnection();
     await connection.query("INSERT INTO users SET?", user);
-    res.json({ message: "User add" , status:"OK"});
+    res.json({ message: "User add", status: "OK" });
   } catch (error) {
     res.status(500);
     res.send(error.message);
@@ -40,5 +78,6 @@ const addUser = async (req, res) => {
 
 export const methods = {
   getUsers,
-  addUser
+  addUser,
+  loginUser,
 };
