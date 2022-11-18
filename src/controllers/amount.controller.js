@@ -5,7 +5,7 @@ const getAmount = async (req, res) => {
     const { id } = req.params;
     const connection = await getConnection();
     const result = await connection.query(
-      "SELECT amoAcc FROM account WHERE idUser=?",
+      "SELECT idAcc,amoAcc FROM account WHERE idUser=?",
       id
     );
     if (JSON.stringify(result) === "[]") {
