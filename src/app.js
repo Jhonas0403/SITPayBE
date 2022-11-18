@@ -8,6 +8,9 @@ import amountRoutes from "./routes/amount.routes";
 
 const app = express();
 var cors = require("cors");
+
+
+
 app.use(cors({ origin: "http://http://localhost:4000" }));
 //Settings
 app.set("port", 4000);

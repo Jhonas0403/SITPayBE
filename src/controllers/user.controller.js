@@ -14,13 +14,13 @@ const getUsers = async (req, res) => {
   }
 };
 
-
 const getUser = async (req, res) => {
   try {
-    const {id} = req.params;
+    const { id } = req.params;
     const connection = await getConnection();
     const result = await connection.query(
-      "SELECT namUser,lasNamUser FROM users WHERE idUser=? ",id
+      "SELECT namUser,lasNamUser FROM users WHERE idUser=? ",
+      id
     );
 
     if (JSON.stringify(result) === "[]") {
@@ -33,7 +33,6 @@ const getUser = async (req, res) => {
     res.send(error.message);
   }
 };
-
 
 const loginUser = async (req, res) => {
   try {
@@ -48,7 +47,6 @@ const loginUser = async (req, res) => {
       console.log("The user doesn't exist");
       res.json({ status: "Error", message: "The user doesn't exist" });
     } else {
-      
       res.json({ status: "OK", result });
     }
   } catch (error) {
@@ -91,10 +89,31 @@ const addUser = async (req, res) => {
     const connection = await getConnection();
     await connection.query("INSERT INTO users SET?", user);
     res.json({ message: "User add", status: "OK" });
+    createAccount(user);
   } catch (error) {
     res.status(500);
     res.send(error.message);
   }
+};
+
+const createAccount = async (user) => {
+  const { dniUser } = user;
+  try {
+    const connection = await getConnection();
+    const result = await connection.query(
+      "SELECT idUser FROM users WHERE dniUser=?",
+      dniUser
+    );
+    const nUser = JSON.stringify(result);
+    const idUser = nUser.substring(11,12)
+    const user={
+      idUser:idUser,
+      amoAcc:0
+    }
+    console.log(user);
+    await connection.query("INSERT INTO account SET?", user);
+    res.json({ message: "account create add", status: "OK" });
+  } catch (error) {}
 };
 
 export const methods = {

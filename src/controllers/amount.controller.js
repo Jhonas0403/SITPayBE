@@ -26,12 +26,13 @@ const updateAmount = async (req, res) => {
     if (id === undefined || amount === undefined) {
       res.status(400).json({ message: "Requeste all filed" });
     }
+    console.log("datos",id, amount);
     const connection = await getConnection();
-    const result = await connection.query(
-      "UPDATE account SET amoAcc=? WHERE idUser = ?",
-      [amount, id]
-    );
-    res.json(result);
+    await connection.query("UPDATE account SET amoAcc=? WHERE idUser = ?", [
+      amount,
+      id,
+    ]);
+    res.status(200).json({ message: "ok" });
   } catch (error) {
     res.status(500);
     res.send(error.message);
