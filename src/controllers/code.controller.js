@@ -13,7 +13,27 @@ const createCode = async (req, res) => {
     res.send(error.message);
   }
 };
+const listAllQr = async (req, res) => {
+  try{
+    const {id} = req.params;
+    const connection = await getConnection();
+    const result = await connection.query(
+      "SELECT denoCode FROM codes WHERE idAccount=?",
+      id
+    );
+    if (JSON.stringify(result) === "[]") {
+      res.json({ status: "Error", message: "The codes don't exist" });
+    } else {
+      res.json({ status: "OK", result });
+    }
+
+  }catch( error){
+
+  }
+}
 
 export const methods ={
-    createCode
+    createCode,
+    listAllQr
+
 }
