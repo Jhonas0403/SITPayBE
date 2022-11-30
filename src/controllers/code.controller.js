@@ -48,10 +48,32 @@ const updateCode = async (req, res) =>{
   }
 }
 
+const getStatus = async ( req, res) => {
+  try{
+    const { id } = req.params;
+    const {denomination} = req.body;
+    const connection = await getConnection();
+    const result = await connection.query(
+      "SELECT status FROM codes WHERE idAccount=? AND denoCode=?",
+      [id, denomination]
+    );
+    if (JSON.stringify(result) === "[]") {
+      res.json({ status: "Error", message: "The code don't exist" });
+    } else {
+      res.json({ status: "OK", result });
+    }
+
+
+  } catch(error){
+    res.status(500);
+    res.send(error.message);
+  }
+}
+
 
 export const methods ={
     createCode,
     listAllQr,
-    updateCode
-
+    updateCode,
+    getStatus
 }
