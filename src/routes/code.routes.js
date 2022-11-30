@@ -8,5 +8,6 @@ router.post("/add", codeController.createCode);
 router.get("/:id", codeController.listAllQr);
 router.put("/cancel/:id", codeController.updateCode);
 router.post("/status/:id", codeController.getStatus);
+router.post("/transfer/:id", codeController.transfer);
 
 export default router;
