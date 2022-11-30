@@ -18,8 +18,8 @@ const listAllQr = async (req, res) => {
     const {id} = req.params;
     const connection = await getConnection();
     const result = await connection.query(
-      "SELECT denoCode FROM codes WHERE idAccount=?",
-      id
+      "SELECT denoCode FROM codes WHERE idAccount=? AND status=?",
+      [id,true]
     );
     if (JSON.stringify(result) === "[]") {
       res.json({ status: "Error", message: "The codes don't exist" });
@@ -32,8 +32,26 @@ const listAllQr = async (req, res) => {
   }
 }
 
+const updateCode = async (req, res) =>{
+  try{
+    const { id } = req.params;
+    const {denomination} = req.body;
+    const connection = await getConnection();
+    await connection.query("UPDATE codes SET status=false WHERE idAccount = ? AND denoCode=?",[
+      id,
+      denomination
+    ]);
+    res.status(200).json({ message: "ok" });
+  } catch (error){
+    res.status(500);
+    res.send(error.message);
+  }
+}
+
+
 export const methods ={
     createCode,
-    listAllQr
+    listAllQr,
+    updateCode
 
 }
